@@ -68,12 +68,7 @@ class Dataset(object):
         for i in range(edges.size(0)):
             for j in range(edges.size(1)):
                 if edges[i][j] != 0:
-                    edges[i][j] = math.log((edges[i][j] * len(train_data["labels"]))/(marginal_edges[i] * marginal_edges[j]))
-                    #filtering and reweighting
-                    if edges[i][j] <= 0.05:
-                        edges[i][j] = 0
-                    else:                 
-                        edges[i][j] = 1/(1 + math.exp((-13)*edges[i][j] + 7.0))
+                    edges[i][j] = (edges[i][j] * len(train_data["labels"]))/(marginal_edges[i] * marginal_edges[j])
                     
 
         edges = normalizeAdjacency(edges + torch.diag(torch.ones(len(label2id))))

@@ -16,6 +16,7 @@ class BertGCN(nn.Module):
         
         self.bert = AutoModel.from_pretrained(args.pretrained)
         self.gc1 = GCNLayer(features.size(1), self.bert.config.hidden_size)
+        self.classifier = nn.Linear(self.bert.config.hidden_size, self.label_features.size(0))
         
         
     def forward(self, input_ids, attention_mask):
@@ -25,5 +26,9 @@ class BertGCN(nn.Module):
         label_embed = self.gc1(self.label_features, self.edges)
         label_embed = F.relu(label_embed)
 
-        output = torch.matmul(bert_output, label_embed.T)
+        output = torch.zeros((bert_output.size(0), label_embed.size(0)), device=self.device)
+        
+        for i in range(bert_output.size(0)):
+            for j in range(label_embed.size(0)):
+                output[i, j] = self.classifier(bert_output[i] + label_embed[j])[j]
         return output

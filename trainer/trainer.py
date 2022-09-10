@@ -45,7 +45,7 @@ class TrainerModel(object):
     def _get_optimizer(self):
         param_optimizer = list(self.model.named_parameters())
         
-        no_decay = ['bias', 'LayerNorm.bias', 'LayerNorm.weight']
+        no_decay = ['bias', 'layer_norm.bias', 'layer_norm.weight']
         optimizer_grouped_parameters = [
                 {'params': [param for name, param in param_optimizer if not any(nd in name for nd in no_decay)],
                     'weight_decay': self.config['weight_decay']},

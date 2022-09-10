@@ -1,5 +1,7 @@
 import re
 import math
+import random, os
+import numpy as np
 from nltk.tokenize import sent_tokenize
 from tqdm import tqdm
 import torch
@@ -23,6 +25,13 @@ def get_text_from_wiki(text, n_sents=2):
     else:
         return " ".join(paragraph[:n_sents])
     
+def normalizeAdjacencyv2(W):
+    assert W.size(0) == W.size(1)
+    d = torch.sum(W, dim = 1)
+    d = 1/d
+    D = torch.diag(d)
+    return D @ W 
+
 def normalizeAdjacency(W):
     assert W.size(0) == W.size(1)
     d = torch.sum(W, dim = 1)
@@ -34,3 +43,12 @@ def get_embedding_from_wiki(sbert, text, n_sent=1):
     text = get_text_from_wiki(text, n_sent)
     embedding = sbert.encode(text, convert_to_tensor=True)
     return embedding
+
+def seed_everything(seed: int):    
+    random.seed(seed)
+    os.environ['PYTHONHASHSEED'] = str(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    torch.cuda.manual_seed(seed)
+    torch.backends.cudnn.deterministic = True
+    torch.backends.cudnn.benchmark = True
