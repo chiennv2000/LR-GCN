@@ -1,0 +1,8 @@
+train:
+  batch_size: 16
+  max_length: 384
+  device: "cuda"
+  n_epochs: 20
+  learning_rate: 0.00005
+  dropout_prob: 0.2
+  weight_decay: 0.01
