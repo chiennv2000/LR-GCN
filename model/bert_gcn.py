@@ -28,7 +28,9 @@ class BertGCN(nn.Module):
 
         output = torch.zeros((bert_output.size(0), label_embed.size(0)), device=self.device)
         
-        for i in range(bert_output.size(0)):
-            for j in range(label_embed.size(0)):
-                output[i, j] = self.classifier(bert_output[i] + label_embed[j])[j]
+        # for i in range(bert_output.size(0)):
+        #     for j in range(label_embed.size(0)):
+        #         output[i, j] = self.classifier(bert_output[i] + label_embed[j])[j]
+        for j in range(label_embed.size(0)):
+            output[:, j] = self.classifier((bert_output + label_embed[j, :].unsqueeze(0)))[:, j]
         return output
