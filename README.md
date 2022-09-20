@@ -1,6 +1,6 @@
 # Label-Representative Graph Convolutional Network for Multi-Label Text Classification
 
-This repository is the official implementation of our LR-GCN paper.
+This repository is the official implementation of our LR-GCN (Label-Representative Graph Convolutional Network for Multi-Label Text Classification) paper.
 
 ## Requirements
 
